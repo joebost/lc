@@ -1,5 +1,8 @@
+# 120
+# https://leetcode.com/problems/triangle/
 from typing import List
 
+## 4/23/21
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
         dp = [0] * len(triangle[-1])

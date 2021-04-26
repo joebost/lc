@@ -1,6 +1,8 @@
+# 1827
 # https://leetcode.com/problems/minimum-operations-to-make-the-array-increasing/
 from typing import List
 
+## 4/24/21
 class Solution:
     def minOperations(self, nums: List[int]) -> int:
       prev = nums[0]

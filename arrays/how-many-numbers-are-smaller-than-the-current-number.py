@@ -1,7 +1,9 @@
+# 1365
 # https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/
 from typing import List
 
 # rt n^2 s n
+## 4/24/21
 class Solution:
   def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
     res = []
@@ -14,6 +16,7 @@ class Solution:
     return res
 
 # rt nlogn, s 2n
+## 4/24/21
 class Solutionv2:
   def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
     sorted = nums.copy()
