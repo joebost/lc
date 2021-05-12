@@ -1,22 +1,40 @@
 import os
 from datetime import datetime
 from fnmatch import fnmatch
+import attr
 
 REPO_URL = "https://github.com/joebost/lc/blob/main/"
-EXCLUDE_FILES = set((".git", "README", "template.py", "generate_readme.py"))
-class Problem:
-  def __init__(self, file):
-    open_file = open(file, "r")
-    self.file_path = file
-    self.name = file.split("/")[-1].replace(".py", "").replace("-", " ").capitalize()
-    self.type = file.split("/")[1].capitalize()
-    self.problem_number = open_file.readline().rstrip().strip("# ")
-    self.problem_link = open_file.readline().rstrip().strip("# ")
-    open_file.close()
+EXCLUDE_FILES = set((".git", "README", "template.py", "generate_readme.py", ".venv", ".vscode"))
 
-  def to_markdown_title(self):
-    title = "[" + self.name + "](" + self.problem_link + ") - " + self.type + " [(solution)](" + REPO_URL + self.file_path.strip("./") + ")"
-    return title
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
+class Problem:
+  problem_name: str;
+  problem_type: str;
+  problem_number: int;
+  problem_link: str;
+  solution_link: str;
+  file_path: str;
+
+def create_problem(file_path: str) -> Problem:
+  open_file = open(file_path, "r")
+  problem_name = file_path.split("/")[-1].split(".")[0].replace("-", " ").capitalize()
+  problem_type = file_path.split("/")[1].capitalize()
+  problem_number = open_file.readline().rstrip().strip("# ")
+  problem_link = open_file.readline().rstrip().strip("# ")
+  solution_link = REPO_URL + file_path.strip("./")
+  open_file.close()
+
+  return Problem(
+    problem_name=problem_name,
+    problem_type=problem_type,
+    problem_number=problem_number,
+    problem_link=problem_link,
+    solution_link=solution_link,
+    file_path=file_path,
+  )
+
+def problem_markdown_title(problem: Problem) -> str:
+  return "[" + problem.problem_name + "](" + problem.problem_link + ") - " + problem.problem_type + " [(solution)](" + problem.solution_link + ")"
 
 class ReadMe:
   def __init__(self):
@@ -31,25 +49,20 @@ class ReadMe:
     else:
       self.months[month].append(file)
 
-  def print(self):
-    for month in self.months.keys():
-      print(month + "\n")
-      for problem in self.months[month]:
-        print(problems[problem].to_markdown_title())
-
-def get_solution_file_paths():
-  solution_files = []
-  for path, subdirs, files in os.walk("."):
+def get_all_problem_files():
+  problem_files = []
+  for path, dirs, files in os.walk("."):
+    [dirs.remove(d) for d in list(dirs) if d in EXCLUDE_FILES]
     for file in files:
-      if fnmatch(file, "*.py") and file not in EXCLUDE_FILES:
+      if file not in EXCLUDE_FILES and file.endswith((".py", ".sh")):
         file_path = os.path.join(path, file)
-        solution_files.append(file_path)
-  return solution_files
+        problem_files.append(file_path)
+  return problem_files
 
 def create_problems(solution_files):
   problems = {}
   for file in solution_files:
-    problems[file] = Problem(file)
+    problems[file] = create_problem(file)
   return problems
 
 def add_solved_dates_to_readme(solution_files, readme : ReadMe):
@@ -71,53 +84,17 @@ def write_to_readme(readme : ReadMe, problems):
     month_title = "### " + month + "\n"
     open_file.write(month_title)
     for problem in readme.months[month]:
-      problem_title = "1. " + problems[problem].to_markdown_title() + "\n"
+      problem_title = "1. " + problem_markdown_title(problems[problem]) + "\n"
       open_file.write(problem_title)
   open_file.close()
 
+def main():
+  all_problem_files = get_all_problem_files()
+  problems = create_problems(all_problem_files)
+  readme = ReadMe()
 
-solution_files = get_solution_file_paths()
-problems = create_problems(solution_files)
-readme = ReadMe()
+  add_solved_dates_to_readme(all_problem_files, readme)
+  write_to_readme(readme, problems)
 
-add_solved_dates_to_readme(solution_files, readme)
-write_to_readme(readme, problems)
-
-
-# get all files
-
-      # date_strs = [line.rstrip().strip("## ") for line in open_file.readlines() if "##" in line]
-      # self.dates = [datetime.strptime(d, "%m/%d/%y") for d in date_strs]
-
-
-
-
-"""
-Expected output:
-
-Table of Contents
-April 2021
-May 2021
-
-April 2021
-1. Two Sum (code) 2x
-13. Problem2 (code)
-
-May 2021
-"""
-
-"""
-Algorithm
-for each file
-create a Problem object
-members should be
-- name
-- number
-- lc link
-- code link
-
-in each file search for dates
-create new date -> problem mapping
-have a group for each month, add problems
-create object for problem within a month
-"""
+if __name__ == "__main__":
+  main()

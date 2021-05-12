@@ -4,6 +4,7 @@
 
 ### April 2021
 1. [Merge two binary trees](https://leetcode.com/problems/merge-two-binary-trees/) - Tree [(solution)](https://github.com/joebost/lc/blob/main/tree/merge-two-binary-trees.py)
+1. [Find 10th line in file](https://leetcode.com/problems/tenth-line/) - Shell [(solution)](https://github.com/joebost/lc/blob/main/shell/find-10th-line-in-file.sh)
 1. [Palindrome linked list](https://leetcode.com/problems/palindrome-linked-list/) - Ll [(solution)](https://github.com/joebost/lc/blob/main/ll/palindrome-linked-list.py)
 1. [Intersection of two linked lists](https://leetcode.com/problems/intersection-of-two-linked-lists/) - Ll [(solution)](https://github.com/joebost/lc/blob/main/ll/intersection-of-two-linked-lists.py)
 1. [Maximum nesting depth of the parentheses](https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/) - Strman [(solution)](https://github.com/joebost/lc/blob/main/strman/maximum-nesting-depth-of-the-parentheses.py)
@@ -20,5 +21,6 @@
 1. [Richest customer wealth](https://leetcode.com/problems/richest-customer-wealth/) - Arrays [(solution)](https://github.com/joebost/lc/blob/main/arrays/richest-customer-wealth.py)
 1. [Number of good pairs](https://leetcode.com/problems/number-of-good-pairs/) - Arrays [(solution)](https://github.com/joebost/lc/blob/main/arrays/number-of-good-pairs.py)
 ### May 2021
+1. [Partition list](https://leetcode.com/problems/partition-list/) - Ll [(solution)](https://github.com/joebost/lc/blob/main/ll/partition-list.py)
 1. [Palindrome number](https://leetcode.com/problems/palindrome-number/) - Strman [(solution)](https://github.com/joebost/lc/blob/main/strman/palindrome-number.py)
 1. [Roman to integer](https://leetcode.com/problems/roman-to-integer/) - Strman [(solution)](https://github.com/joebost/lc/blob/main/strman/roman-to-integer.py)
