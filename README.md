@@ -1,3 +1,5 @@
+![problems_per_month](https://github.com/joebost/lc/blob/main/problems_per_month.png)
+
 [April 2021](#april-2021)
 
 [May 2021](#may-2021)

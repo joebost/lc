@@ -1,12 +1,19 @@
 import os
 from datetime import datetime
 from fnmatch import fnmatch
+from typing import List
 import attr
+import matplotlib.pyplot as plt
 
 REPO_URL = "https://github.com/joebost/lc/blob/main/"
-EXCLUDE_FILES = set(
-    (".git", "README", "template.py", "generate_readme.py", ".venv", ".vscode")
-)
+EXCLUDE_FILES = {
+    ".git",
+    "README",
+    "template.py",
+    "generate_readme.py",
+    ".venv",
+    ".vscode",
+}
 
 
 @attr.s(kw_only=True, frozen=True, auto_attribs=True)
@@ -93,8 +100,9 @@ def add_solved_dates_to_readme(solution_files, readme: ReadMe):
 
 
 def write_to_readme(readme: ReadMe, problems):
+    os.remove("README.md")
     open_file = open("README.md", "w")
-    open_file.truncate(0)
+    open_file.write(f"![problems_per_month]({REPO_URL}problems_per_month.png)\n\n")
     for month in readme.months.keys():
         line = "[" + month + "](#" + month.lower().replace(" ", "-") + ")\n\n"
         open_file.write(line)
@@ -108,12 +116,23 @@ def write_to_readme(readme: ReadMe, problems):
     open_file.close()
 
 
+def create_bar_graph(months: List[str], counts: List[int]):
+    plt.bar(months, counts)
+    plt.title("Problems per month")
+    plt.xlabel("Month")
+    plt.ylabel("Problems")
+    plt.savefig("problems_per_month.png")
+
+
 def main():
     all_problem_files = get_all_problem_files()
     problems = create_problems(all_problem_files)
     readme = ReadMe()
 
     add_solved_dates_to_readme(all_problem_files, readme)
+    months = list(readme.months.keys())
+    counts = [len(values) for values in readme.months.values()]
+    create_bar_graph(months=months, counts=counts)
     write_to_readme(readme, problems)
 
 
